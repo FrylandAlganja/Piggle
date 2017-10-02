@@ -1,8 +1,8 @@
 function createPlayer (x, y) {
 	var playerSpeed = 64;
-	var player = Crafty.e('2D, DOM, Color, guyNorth, Motion, Keyboard')
+	var player = Crafty.e('2D, DOM, Color, guyNorth, Motion, Keyboard, Collision')
 		.attr({x: x, y: y, w: 32, h: 32})
-		.checkHits('tree');
+		.checkHits('tree')
 		.bind('EnterFrame', function (e) {
 			this.vx = this.vy = 0;
 			if (this.isDown(Crafty.keys.UP_ARROW)) {
