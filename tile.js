@@ -1,5 +1,4 @@
 function createTile (tileId, gridX, gridY) {
-	var tileSize = 32;
 	var tileSprite;
 	switch (tileId) {
 		case 0:
