@@ -6,10 +6,20 @@ function createPlayer (x, y) {
 	var WEST = 3;
 	var moving = false;
 	var direction;
-	var player = Crafty.e('2D, DOM, Color, guyNorth, Motion, Keyboard, Collision')
+	var player = Crafty.e('2D, DOM, Color, Gridlock, guyNorth, Motion, Keyboard, Collision')
 		.attr({x: x, y: y, w: 32, h: 32})
 		.checkHits('tree')
 		.bind('EnterFrame', function (e) {
+			if (this.vy < 0) {
+				this.sprite('guyNorth');
+			} else if (this.vx > 0) {
+				this.sprite('guyEast');
+			} else if (this.vy > 0) {
+				this.sprite('guySouth');
+			} else if (this.vx < 0) {
+				this.sprite('guyWest');
+			}
+			this.setGridPosition();
 			if (moving == true) {
 				switch (direction) {
 					case NORTH:
@@ -25,48 +35,40 @@ function createPlayer (x, y) {
 					    this.vx = -playerSpeed;
 					    break;
 				}
-				if (((Math.floor(this._x) / tileSize) % 1 == 0) && (direction == EAST || direction == WEST)) {
-					console.log("woah");
-					moving = false;
+				if (((Math.floor(this._x) / tileSize) % 1 == 0) && (direction == EAST || direction == WEST)) {					moving = false;
 					this.vx = 0;
+					moving = false;
+					return 0;
 				}
-				if (((Math.floor(this._y) / tileSize) % 1 == 0) && (direction == NORTH || direction == SOUTH)) {
-					console.log("whoa2");
-					moving = false
+				if (((Math.floor(this._y) / tileSize) % 1 == 0) && (direction == NORTH || direction == SOUTH)) {					moving = false
 					this.vy = 0;
+					moving = false;
+					return 0;
 				}
-			}
-			if (this.isDown(Crafty.keys.UP_ARROW) ||
-				this.isDown(Crafty.keys.RIGHT_ARROW) ||
-				this.isDown(Crafty.keys.DOWN_ARROW) ||
-				this.isDown(Crafty.keys.LEFT_ARROW)) {
-				moving = true;
-				this.vx = this.vy = 0;
-				if (this.isDown(Crafty.keys.UP_ARROW)) {
-					direction = NORTH;
-					this.vy = -playerSpeed;
+			} else {
+				if (this.isDown(Crafty.keys.UP_ARROW) ||
+					this.isDown(Crafty.keys.RIGHT_ARROW) ||
+					this.isDown(Crafty.keys.DOWN_ARROW) ||
+					this.isDown(Crafty.keys.LEFT_ARROW)) {
+					moving = true;
+					this.vx = this.vy = 0;
+					if (this.isDown(Crafty.keys.UP_ARROW)) {
+						direction = NORTH;
+						this.vy = -playerSpeed;
+					}
+					if (this.isDown(Crafty.keys.RIGHT_ARROW)) {
+						direction = EAST;
+						this.vx = playerSpeed;
+					}
+					if (this.isDown(Crafty.keys.DOWN_ARROW)) {
+						direction = SOUTH;
+						this.vy = playerSpeed;
+					}
+					if (this.isDown(Crafty.keys.LEFT_ARROW)) {
+						direction = WEST;
+						this.vx = -playerSpeed;
+					}
 				}
-				if (this.isDown(Crafty.keys.RIGHT_ARROW)) {
-					direction = EAST;
-					this.vx = playerSpeed;
-				}
-				if (this.isDown(Crafty.keys.DOWN_ARROW)) {
-					direction = SOUTH;
-					this.vy = playerSpeed;
-				}
-				if (this.isDown(Crafty.keys.LEFT_ARROW)) {
-					direction = WEST;
-					this.vx = -playerSpeed;
-				}
-			}
-			if (this.vy < 0) {
-				this.sprite('guyNorth');
-			} else if (this.vx > 0) {
-				this.sprite('guyEast');
-			} else if (this.vy > 0) {
-				this.sprite('guySouth');
-			} else if (this.vx < 0) {
-				this.sprite('guyWest');
 			}
 		});
 	return player;

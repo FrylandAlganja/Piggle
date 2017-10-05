@@ -1,4 +1,5 @@
 Crafty.init(500,350, document.getElementById('game'));
+var cellSize = 32;
 Crafty.sprite("img/sprites.png", {
     guyNorth: [0, 0, 32, 32],
 	guyEast: [32, 0, 32, 32],
@@ -7,12 +8,16 @@ Crafty.sprite("img/sprites.png", {
 	grass: [64, 32, 32, 32],
     tree: [96, 32, 32, 32]});
 createPlayer(32, 32);
-for (var i = 0; i < 10; i++) {
+for (var y = 0; y < 10; y++) {
+	tilemap[y] = [];
 	for (var x = 0; x < 10; x++) {
-		if (i == 0 || x == 0 || i == 9 || x == 9) {
-			createTile(1, i, x);
+		if (y == 0 || x == 0 || y == 9 || x == 9) {
+			tilemap[y][x] = createTile(1, x, y);
+			tilemap[y][x].tileType = "tree";
 		} else {
-			createTile(0, i, x);
+			tilemap[y][x] = createTile(0, x, y);
+			tilemap[y][x].tileType = "grass";
 		}
+		console.log(tilemap[y][x].gridX, tilemap[y][x].gridY);
 	}
 }
